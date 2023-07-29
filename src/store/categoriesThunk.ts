@@ -55,3 +55,10 @@ export const createCategory = createAsyncThunk<void, TApiCategory>(
         await axiosApi.post('/categories.json', category);
     }
 );
+
+export const deleteCategory = createAsyncThunk<void, string>(
+    'categories/delete',
+    async (id) => {
+        await axiosApi.delete('/categories/' + id + '.json');
+    }
+);

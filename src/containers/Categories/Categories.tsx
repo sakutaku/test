@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 import {useAppDispatch} from "../../app/hook";
 import {fetchTransactions} from "../../store/transactionThunk";
-import {fetchCategories} from "../../store/categoriesThunk";
+import {deleteCategory, fetchCategories} from "../../store/categoriesThunk";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import CategoryItem from "./CategoryItem";
@@ -14,6 +14,8 @@ const Categories = () => {
     const categories = useSelector((state: RootState) => state.categories.allCategories);
     const show = useSelector((state: RootState) => state.categories.show);
     const category = useSelector((state: RootState) => state.categories.oneCategory);
+    const deleteLoading = useSelector((state: RootState) => state.categories.deleteLoading);
+
 
 
     const checkOneCategory = useCallback(async () => {
@@ -33,6 +35,11 @@ const Categories = () => {
         dispatch(setShow(true));
     };
 
+    const removeCategory = async (id: string) => {
+        await dispatch(deleteCategory(id));
+        await dispatch(fetchCategories());
+    };
+
     let modal: React.ReactNode = null;
 
     if(show) {
@@ -49,7 +56,7 @@ const Categories = () => {
                     </div>
                     <div>
                         {categories.map((oneCat) => (
-                            <CategoryItem items={oneCat}/>
+                            <CategoryItem items={oneCat} onDelete={() => removeCategory(oneCat.id)} key={oneCat.id} deleteLoading={deleteLoading}/>
                         ))}
                     </div>
                 </div>

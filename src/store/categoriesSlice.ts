@@ -1,6 +1,6 @@
 import {ICategory, ICategoryMutation} from "../types";
 import {createSlice,} from "@reduxjs/toolkit";
-import {createCategory, fetchCategories, fetchCategory, fetchUpdateCategory} from "./categoriesThunk";
+import {createCategory, deleteCategory, fetchCategories, fetchCategory, fetchUpdateCategory} from "./categoriesThunk";
 
 interface CategoriesState {
     allCategories: ICategory[];
@@ -10,6 +10,7 @@ interface CategoriesState {
     show: boolean;
     updateLoading: boolean;
     createLoading: boolean;
+    deleteLoading: boolean | string;
 }
 
 const initialState: CategoriesState = {
@@ -20,6 +21,7 @@ const initialState: CategoriesState = {
     show: false,
     updateLoading: false,
     createLoading: false,
+    deleteLoading: false,
 };
 
 const categoriesSlice = createSlice({
@@ -71,6 +73,15 @@ const categoriesSlice = createSlice({
         });
         builder.addCase(createCategory.rejected, (state) => {
             state.createLoading = false;
+        });
+        builder.addCase(deleteCategory.pending, (state, {meta}) => {
+            state.deleteLoading = meta.arg;
+        });
+        builder.addCase(deleteCategory.fulfilled, (state) => {
+            state.deleteLoading = false;
+        });
+        builder.addCase(deleteCategory.rejected, (state) => {
+            state.deleteLoading = false;
         });
     }
 });
