@@ -5,18 +5,20 @@ import {fetchTransactions} from "./transactionThunk";
 interface TransactionState {
     items: ITransaction[],
     fetchLoading: boolean;
+    total: number;
 }
 
 const initialState: TransactionState = {
     items: [],
-    fetchLoading: false
+    fetchLoading: false,
+    total: 0,
 };
 
 const transactionSlice = createSlice({
     name: 'transactions',
     initialState,
     reducers: {
-        updatePizza: (state, { payload: transactions}: PayloadAction<ITransaction[]>) => {
+        updateTransaction: (state, { payload: transactions}: PayloadAction<ITransaction[]>) => {
             const newTransactions: ITransaction[] = [];
 
             state.items.forEach((transaction) => {
@@ -33,6 +35,9 @@ const transactionSlice = createSlice({
                 state.items = newTransactions;
             });
         },
+        countSum: (state, {payload: num}: PayloadAction<number>) => {
+            state.total+=num;
+        }
     },
     extraReducers: builder => {
         builder.addCase(fetchTransactions.pending, state => {
@@ -51,5 +56,6 @@ const transactionSlice = createSlice({
 export const transactionsReducer = transactionSlice.reducer;
 
 export const {
-    updatePizza
+    updateTransaction,
+    countSum,
 } = transactionSlice.actions;

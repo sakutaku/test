@@ -5,13 +5,15 @@ import {RootState} from "../../app/store";
 import Spinner from "../../components/Spinner/Spinner";
 import {fetchTransactions} from "../../store/transactionThunk";
 import {fetchCategories} from "../../store/categoriesThunk";
-import {IAllTransactions} from "../../types";
+import {IAllTransactions, ICategory, ITransaction} from "../../types";
+import TransactionItem from "./TransactionItem";
 
 const Transactions = () => {
     const dispatch = useAppDispatch();
     const transactions = useSelector((state: RootState) => state.transactions.items);
-    const pizzasLoading = useSelector((state: RootState) => state.transactions.fetchLoading);
+    const transactionsLoading = useSelector((state: RootState) => state.transactions.fetchLoading);
     const categories = useSelector((state: RootState) => state.categories.allCategories);
+    const totalSum = useSelector((state: RootState) => state.transactions.total);
 
 
     const allTransactions: IAllTransactions[] = [];
@@ -21,29 +23,46 @@ const Transactions = () => {
         dispatch(fetchCategories());
     }, [dispatch]);
 
-
-    categories.forEach((category, index) => {
-            transactions.map((oneTr) => {
+    categories.forEach((category: ICategory, index) => {
+            transactions.forEach((oneTr: ITransaction) => {
                 console.log(index);
 
-            })
+                if(oneTr.category === category.id) {
+                    const newObj = {
+                        name: category.name,
+                        date: oneTr.date,
+                        price: oneTr.price,
+                        id: oneTr.id,
+                        category: category.type,
+                    };
+
+                    allTransactions.push(newObj);
+                }
+
+            });
         });
 
+    allTransactions.sort((a,b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
 
+    let transactionsItems: React.ReactNode = <Spinner/>;
 
-    if(allTransactions.length > 0) {
-        console.log(allTransactions);
+    if(!transactionsLoading) {
+        transactionsItems = allTransactions.map((item) => (
+                <TransactionItem item={item} key={item.id}/>
+        ));
     }
-
-    const show = () => {
-        console.log(allTransactions);
-    }
-    let transactionsLayout: React.ReactNode = <Spinner/>;
 
 
     return (
-        <div className="transactions-page">
-            <button></button>
+        <div className="container">
+            <div className="transactions-page">
+                <h2 className="transaction-total">Total: {totalSum} KGS</h2>
+            </div>
+            <div>
+                {transactionsItems}
+            </div>
         </div>
     );
 };

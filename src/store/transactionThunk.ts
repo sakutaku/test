@@ -2,7 +2,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import {IApiTransaction, ITransaction} from "../types";
 import axiosApi from "../axiosApi";
 import {AppDispatch} from "../app/store";
-import {updatePizza} from "./transactionSlice";
+import { updateTransaction} from "./transactionSlice";
 
 export const fetchTransactions = createAsyncThunk<ITransaction[], undefined, { dispatch: AppDispatch }>(
     'transactions/fetch',
@@ -20,7 +20,7 @@ export const fetchTransactions = createAsyncThunk<ITransaction[], undefined, { d
             });
         }
 
-        thunkAPI.dispatch(updatePizza(newTransactions))
+        thunkAPI.dispatch(updateTransaction(newTransactions))
         return newTransactions;
     }
 );

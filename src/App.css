@@ -148,3 +148,43 @@ body{
   display: flex;
   justify-content: space-around;
 }
+.transaction-item{
+  color: #000;
+  padding: 20px 10px;
+  margin: 0 auto 20px;
+  width: 700px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  border: 8px solid #9E7A19FF;
+  border-radius: 10px;
+  justify-content: space-between;
+  overflow: hidden;
+  background-color: #fff;
+}
+.btn-edit-two{
+  margin: 0 10px 0 40px;
+  background-color: transparent;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("assets/images/edit2.svg");
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+.btn-delete-two{
+  background-color: transparent;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("assets/images/trash2.svg");
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+.transaction-total{
+  text-align: center;
+  font-size: 30px;
+  font-weight: 900;
+}

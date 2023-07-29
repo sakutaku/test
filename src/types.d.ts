@@ -29,6 +29,8 @@ export interface IAllTransactions {
     date: string,
     name: string,
     price: number,
+    id: string,
+    category: string,
 }
 
 export interface IOneCategory {

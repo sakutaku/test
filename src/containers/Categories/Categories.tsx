@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
 import {useAppDispatch} from "../../app/hook";
-import {fetchTransactions} from "../../store/transactionThunk";
 import {deleteCategory, fetchCategories} from "../../store/categoriesThunk";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
