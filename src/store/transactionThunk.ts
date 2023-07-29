@@ -1,10 +1,10 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {IApiTransaction, ITransaction} from "../types";
 import axiosApi from "../axiosApi";
-import {AppDispatch} from "../app/store";
-import { updateTransaction} from "./transactionSlice";
+import {AppDispatch, RootState} from "../app/store";
+import {clearCount, updateTransaction} from "./transactionSlice";
 
-export const fetchTransactions = createAsyncThunk<ITransaction[], undefined, { dispatch: AppDispatch }>(
+export const fetchTransactions = createAsyncThunk<ITransaction[], undefined, { dispatch: AppDispatch , state: RootState}>(
     'transactions/fetch',
     async (_, thunkAPI) => {
         const transactionsResponse = await axiosApi.get<IApiTransaction | null>('/transactions.json');
@@ -20,7 +20,8 @@ export const fetchTransactions = createAsyncThunk<ITransaction[], undefined, { d
             });
         }
 
-        thunkAPI.dispatch(updateTransaction(newTransactions))
+        thunkAPI.dispatch(updateTransaction(newTransactions));
+        thunkAPI.dispatch(clearCount());
         return newTransactions;
     }
 );
@@ -31,3 +32,9 @@ export const deleteTransaction = createAsyncThunk<void, string>(
         await axiosApi.delete('/transactions/' + id + '.json');
     }
 );
+
+export const fetchCategories = createAsyncThunk<void, string, { dispatch: AppDispatch , state: RootState}>(
+    'transactions/fetchCategories',
+    async () => {
+    }
+)

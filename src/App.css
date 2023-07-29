@@ -188,3 +188,9 @@ body{
   font-size: 30px;
   font-weight: 900;
 }
+.input-transaction-one{
+  width: 460px;
+}
+.input-transaction-two{
+  width: 440px;
+}

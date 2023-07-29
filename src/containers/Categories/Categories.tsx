@@ -38,7 +38,6 @@ const Categories = () => {
     const removeCategory = async (id: string) => {
         await dispatch(deleteCategory(id));
         await dispatch(fetchCategories());
-        dispatch(clearCount());
     };
 
     let modal: React.ReactNode = null;

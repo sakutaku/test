@@ -32,7 +32,6 @@ const Transactions = () => {
 
     categories.forEach((category: ICategory, index) => {
             transactions.forEach((oneTr: ITransaction) => {
-                console.log(index);
 
                 if(oneTr.category === category.id) {
                     const newObj = {

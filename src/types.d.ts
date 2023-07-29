@@ -33,6 +33,11 @@ export interface IAllTransactions {
     category: string,
 }
 
+export type TApiTransaction = {
+    type: string,
+    category: string,
+    price: number,
+}
 export interface IOneCategory {
     name: string,
     type: string,

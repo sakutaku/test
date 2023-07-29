@@ -7,6 +7,8 @@ interface TransactionState {
     fetchLoading: boolean;
     total: number;
     deleteLoading: boolean | string,
+    show: boolean;
+    selectedCategories: Array<string>;
 }
 
 const initialState: TransactionState = {
@@ -14,6 +16,8 @@ const initialState: TransactionState = {
     fetchLoading: false,
     total: 0,
     deleteLoading: false,
+    show: false,
+    selectedCategories: [],
 };
 
 const transactionSlice = createSlice({
@@ -42,6 +46,15 @@ const transactionSlice = createSlice({
         },
         clearCount: (state) => {
             state.total = 0;
+        },
+        setShowTr: (state, {payload: boolean}) => {
+            state.show = boolean;
+        },
+        addCategory: (state, action) => {
+            state.selectedCategories.push(action.payload);
+        },
+        clearCategory: (state) => {
+            state.selectedCategories = [];
         }
     },
     extraReducers: builder => {
@@ -72,5 +85,8 @@ export const transactionsReducer = transactionSlice.reducer;
 export const {
     updateTransaction,
     countSum,
-    clearCount
+    clearCount,
+    setShowTr,
+    addCategory,
+    clearCategory
 } = transactionSlice.actions;
