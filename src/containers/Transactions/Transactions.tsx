@@ -3,7 +3,7 @@ import {useAppDispatch} from "../../app/hook";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import Spinner from "../../components/Spinner/Spinner";
-import {fetchTransactions} from "../../store/transactionThunk";
+import {deleteTransaction, fetchTransactions} from "../../store/transactionThunk";
 import {fetchCategories} from "../../store/categoriesThunk";
 import {IAllTransactions, ICategory, ITransaction} from "../../types";
 import TransactionItem from "./TransactionItem";
@@ -14,6 +14,8 @@ const Transactions = () => {
     const transactionsLoading = useSelector((state: RootState) => state.transactions.fetchLoading);
     const categories = useSelector((state: RootState) => state.categories.allCategories);
     const totalSum = useSelector((state: RootState) => state.transactions.total);
+    const deleteLoading = useSelector((state: RootState) => state.transactions.deleteLoading);
+
 
 
     const allTransactions: IAllTransactions[] = [];
@@ -22,6 +24,11 @@ const Transactions = () => {
         dispatch(fetchTransactions());
         dispatch(fetchCategories());
     }, [dispatch]);
+
+    const removeTransaction = async (id: string) => {
+        await dispatch(deleteTransaction(id));
+        await dispatch(fetchTransactions());
+    };
 
     categories.forEach((category: ICategory, index) => {
             transactions.forEach((oneTr: ITransaction) => {
@@ -50,7 +57,7 @@ const Transactions = () => {
 
     if(!transactionsLoading) {
         transactionsItems = allTransactions.map((item) => (
-                <TransactionItem item={item} key={item.id}/>
+                <TransactionItem item={item} key={item.id} deleteLoading={deleteLoading} onDelete={() => removeTransaction(item.id)}/>
         ));
     }
 

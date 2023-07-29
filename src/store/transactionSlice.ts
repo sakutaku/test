@@ -1,17 +1,19 @@
 import {ITransaction} from "../types";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {fetchTransactions} from "./transactionThunk";
+import {deleteTransaction, fetchTransactions} from "./transactionThunk";
 
 interface TransactionState {
     items: ITransaction[],
     fetchLoading: boolean;
     total: number;
+    deleteLoading: boolean | string,
 }
 
 const initialState: TransactionState = {
     items: [],
     fetchLoading: false,
     total: 0,
+    deleteLoading: false,
 };
 
 const transactionSlice = createSlice({
@@ -37,6 +39,9 @@ const transactionSlice = createSlice({
         },
         countSum: (state, {payload: num}: PayloadAction<number>) => {
             state.total+=num;
+        },
+        clearCount: (state) => {
+            state.total = 0;
         }
     },
     extraReducers: builder => {
@@ -50,6 +55,15 @@ const transactionSlice = createSlice({
         builder.addCase(fetchTransactions.rejected, state => {
             state.fetchLoading = false;
         });
+        builder.addCase(deleteTransaction.pending, (state, {meta}) => {
+            state.deleteLoading = meta.arg;
+        });
+        builder.addCase(deleteTransaction.fulfilled, (state) => {
+            state.deleteLoading = false;
+        });
+        builder.addCase(deleteTransaction.rejected, (state) => {
+            state.deleteLoading = false;
+        });
     }
 })
 
@@ -58,4 +72,5 @@ export const transactionsReducer = transactionSlice.reducer;
 export const {
     updateTransaction,
     countSum,
+    clearCount
 } = transactionSlice.actions;

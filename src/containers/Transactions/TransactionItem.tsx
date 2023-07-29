@@ -3,12 +3,15 @@ import {IAllTransactions} from "../../types";
 import {NavLink} from "react-router-dom";
 import {useAppDispatch} from "../../app/hook";
 import {countSum} from "../../store/transactionSlice";
+import BtnSpinner from "../../components/Spinner/BtnSpinner";
 
 
 interface Props {
     item: IAllTransactions;
+    onDelete: React.MouseEventHandler;
+    deleteLoading: boolean | string;
 }
-const TransactionItem: React.FC<Props> = ({item}) => {
+const TransactionItem: React.FC<Props> = ({item, deleteLoading, onDelete}) => {
     const dispatch = useAppDispatch();
 
 
@@ -35,7 +38,10 @@ const TransactionItem: React.FC<Props> = ({item}) => {
                 </NavLink>
                 <button
                     className="btn-delete-two"
+                    onClick={onDelete}
+                    disabled={deleteLoading ? deleteLoading === item.id : false}
                 >
+                    {deleteLoading && deleteLoading === item.id && (<BtnSpinner/>)}
                 </button>
             </div>
         </div>
