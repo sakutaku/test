@@ -1,26 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Route, Routes} from "react-router-dom";
+import Main from "./containers/Main/Main";
+import Categories from "./containers/Categories/Categories";
 
-function App() {
+const App = () => {
+    const date = new Date();
+    const curr_date = date.getDate();
+    const curr_m = date.getMonth() + 1;
+    const curr_y = date.getFullYear();
+    let dateMain: string = '';
+
+    if(curr_m < 10) {
+        dateMain = curr_y+"-"+"0"+curr_m+"-"+ curr_date;
+    } else {
+        dateMain = curr_y+"-"+curr_m+"-"+ curr_date;
+    }
+
+    console.log(dateMain);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+        <Route path="/" element={(
+            <Main/>
+        )}/>
+        <Route path="/categories" element={(
+            <Categories/>
+        )}/>
+    </Routes>
   );
-}
+};
 
 export default App;
