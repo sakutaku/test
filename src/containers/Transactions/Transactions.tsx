@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useAppDispatch} from "../../app/hook";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
@@ -7,6 +7,7 @@ import {deleteTransaction, fetchTransactions} from "../../store/transactionThunk
 import {fetchCategories} from "../../store/categoriesThunk";
 import {IAllTransactions, ICategory, ITransaction} from "../../types";
 import TransactionItem from "./TransactionItem";
+import {updateOneTransaction} from "../../store/transactionSlice";
 
 const Transactions = () => {
     const dispatch = useAppDispatch();
@@ -15,22 +16,33 @@ const Transactions = () => {
     const categories = useSelector((state: RootState) => state.categories.allCategories);
     const totalSum = useSelector((state: RootState) => state.transactions.total);
     const deleteLoading = useSelector((state: RootState) => state.transactions.deleteLoading);
+    const transaction = useSelector((state: RootState) => state.transactions.oneTransaction);
 
 
+    const checkOneTransaction = useCallback(async () => {
+        await dispatch(updateOneTransaction());
+    }, [dispatch]);
 
     const allTransactions: IAllTransactions[] = [];
 
     useEffect( () => {
+        if(transaction !== null) {
+            void checkOneTransaction();
+        }
+
         dispatch(fetchTransactions());
         dispatch(fetchCategories());
-    }, [dispatch]);
+    }, [dispatch, checkOneTransaction, transaction]);
 
     const removeTransaction = async (id: string) => {
-        await dispatch(deleteTransaction(id));
-        await dispatch(fetchTransactions());
+        if(window.confirm('Do you want to delete transaction?')) {
+            await dispatch(deleteTransaction(id));
+            await dispatch(fetchTransactions());
+        }
+
     };
 
-    categories.forEach((category: ICategory, index) => {
+    categories.forEach((category: ICategory) => {
             transactions.forEach((oneTr: ITransaction) => {
 
                 if(oneTr.category === category.id) {

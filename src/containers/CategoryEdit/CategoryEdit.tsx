@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
-import Header from "../components/Header/Header";
+import Header from "../../components/Header/Header";
 import {useNavigate, useParams} from "react-router-dom";
-import {useAppDispatch} from "../app/hook";
+import {useAppDispatch} from "../../app/hook";
 import {useSelector} from "react-redux";
-import {RootState} from "../app/store";
-import {fetchCategory, fetchUpdateCategory} from "../store/categoriesThunk";
-import {TApiCategory} from "../types";
-import Spinner from "../components/Spinner/Spinner";
-import CategoryForm from "../components/CategoryForm/CategoryForm";
+import {RootState} from "../../app/store";
+import {fetchCategory, fetchUpdateCategory} from "../../store/categoriesThunk";
+import {TApiCategory} from "../../types";
+import Spinner from "../../components/Spinner/Spinner";
+import CategoryForm from "../../components/CategoryForm/CategoryForm";
 
 const CategoryEdit = () => {
     const { id } = useParams() as {id: string};
@@ -31,11 +31,14 @@ const CategoryEdit = () => {
         <>
          <Header/>
          <div className="container">
-             <h1>Edit Category!</h1>
-             {fetchLoading && <Spinner/>}
-             {category &&
-                 <CategoryForm onSubmit={onSubmit} isEdit={true} existingCategory={category} isLoading={updateLoading}/>
-             }
+             <div className="edit-category-page">
+                 <h1>Edit Category!</h1>
+                 {fetchLoading && <Spinner/>}
+                 {category &&
+                     <CategoryForm onSubmit={onSubmit} isEdit={true} existingCategory={category} isLoading={updateLoading}/>
+                 }
+             </div>
+
          </div>
         </>
     );

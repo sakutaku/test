@@ -7,7 +7,6 @@ import CategoryItem from "./CategoryItem";
 import Header from "../../components/Header/Header";
 import {setShow, updateOneCategory} from "../../store/categoriesSlice";
 import CategoryModal from "../CategoryModal/CategoryModal";
-import {clearCount} from "../../store/transactionSlice";
 
 const Categories = () => {
     const dispatch = useAppDispatch();
@@ -36,8 +35,10 @@ const Categories = () => {
     };
 
     const removeCategory = async (id: string) => {
-        await dispatch(deleteCategory(id));
-        await dispatch(fetchCategories());
+        if(window.confirm('Do you want to delete category?')) {
+            await dispatch(deleteCategory(id));
+            await dispatch(fetchCategories());
+        }
     };
 
     let modal: React.ReactNode = null;

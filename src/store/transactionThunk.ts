@@ -1,5 +1,10 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {IApiTransaction, ITransaction, TApiOneTransaction} from "../types";
+import {
+    IApiTransaction,
+    ITransaction,
+    TApiOneTransaction,
+    TApiTransaction
+} from "../types";
 import axiosApi from "../axiosApi";
 import {AppDispatch, RootState} from "../app/store";
 import {clearCount, updateTransaction} from "./transactionSlice";
@@ -25,7 +30,31 @@ export const fetchTransactions = createAsyncThunk<ITransaction[], undefined, { d
         return newTransactions;
     }
 );
+export const fetchTransaction = createAsyncThunk<TApiTransaction, string>(
+    'transactions/fetchOne',
+    async (id) => {
 
+        const response = await axiosApi.get<TApiTransaction | null>('/transactions/' + id + '.json');
+        const transaction = response.data;
+
+        if (transaction === null) {
+            throw new Error('Not found');
+        }
+
+        return transaction;
+    }
+);
+
+interface UpdateTransactionParams {
+    id: string;
+    transaction: TApiOneTransaction;
+}
+export const fetchUpdateTransaction = createAsyncThunk<void, UpdateTransactionParams>(
+    'transactions/updateTransaction',
+    async (params) => {
+        await axiosApi.put(`/transactions/${params.id}.json`, params.transaction);
+    }
+);
 export const deleteTransaction = createAsyncThunk<void, string>(
     'transactions/delete',
     async (id) => {

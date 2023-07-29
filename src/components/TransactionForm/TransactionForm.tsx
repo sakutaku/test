@@ -9,7 +9,7 @@ import BtnSpinner from "../Spinner/BtnSpinner";
 interface Props {
     onSubmit: (newTransaction: TApiOneTransaction) => void;
     isEdit?: boolean,
-    existingCategory?: TApiTransaction,
+    existingTransaction?: TApiTransaction,
     isLoading?: boolean,
     isAdd?: boolean,
 }
@@ -20,9 +20,9 @@ const initialState = {
     price: 0,
 };
 
-const TransactionForm: React.FC<Props> = ({onSubmit, isEdit,existingCategory = initialState, isLoading, isAdd}) => {
+const TransactionForm: React.FC<Props> = ({onSubmit, isEdit,existingTransaction = initialState, isLoading, isAdd}) => {
     const dispatch = useAppDispatch();
-    const [newTransaction, setNewTransaction] = useState(existingCategory);
+    const [newTransaction, setNewTransaction] = useState(existingTransaction);
     const categ  = useSelector((state: RootState) => state.categories.allCategories);
 
     let all: ICategory[] = [];

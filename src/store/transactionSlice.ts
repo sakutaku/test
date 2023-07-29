@@ -1,22 +1,34 @@
-import {ITransaction} from "../types";
+import {ITransaction, TApiTransaction} from "../types";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {createTransaction, deleteTransaction, fetchTransactions} from "./transactionThunk";
+import {
+    createTransaction,
+    deleteTransaction,
+    fetchTransaction,
+    fetchTransactions,
+    fetchUpdateTransaction
+} from "./transactionThunk";
 
 interface TransactionState {
     items: ITransaction[],
+    oneTransaction: TApiTransaction | null;
     fetchLoading: boolean;
+    fetchOneLoading: boolean;
     total: number;
     deleteLoading: boolean | string,
     show: boolean;
+    updateLoading: boolean,
     createLoading: boolean;
 }
 
 const initialState: TransactionState = {
     items: [],
+    oneTransaction: null,
     fetchLoading: false,
+    fetchOneLoading: false,
     total: 0,
     deleteLoading: false,
     show: false,
+    updateLoading: false,
     createLoading: false,
 };
 
@@ -49,6 +61,9 @@ const transactionSlice = createSlice({
         },
         setShowTr: (state, {payload: boolean}) => {
             state.show = boolean;
+        },
+        updateOneTransaction: (state) => {
+            state.oneTransaction = null;
         }
     },
     extraReducers: builder => {
@@ -61,6 +76,25 @@ const transactionSlice = createSlice({
         });
         builder.addCase(fetchTransactions.rejected, state => {
             state.fetchLoading = false;
+        });
+        builder.addCase(fetchTransaction.pending, (state) => {
+            state.fetchOneLoading = true;
+        });
+        builder.addCase(fetchTransaction.fulfilled, (state, {payload: transaction}) => {
+            state.oneTransaction = transaction;
+            state.fetchOneLoading = false;
+        });
+        builder.addCase(fetchTransaction.rejected, (state) => {
+            state.fetchOneLoading = false;
+        });
+        builder.addCase(fetchUpdateTransaction.pending, (state) => {
+            state.updateLoading = true;
+        });
+        builder.addCase(fetchUpdateTransaction.fulfilled, (state) => {
+            state.updateLoading = false;
+        });
+        builder.addCase(fetchUpdateTransaction.rejected, (state) => {
+            state.updateLoading = false;
         });
         builder.addCase(createTransaction.pending, (state) => {
             state.createLoading = true;
@@ -89,5 +123,6 @@ export const {
     updateTransaction,
     countSum,
     clearCount,
-    setShowTr
+    setShowTr,
+    updateOneTransaction
 } = transactionSlice.actions;
