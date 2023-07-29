@@ -27,6 +27,9 @@ const categoriesSlice = createSlice({
         setShow: (state, {payload: boolean}) => {
             state.show = boolean;
         },
+        updateOneCategory: (state) => {
+            state.oneCategory = null;
+        }
     },
     extraReducers: builder => {
         builder.addCase(fetchCategories.pending, state => {
@@ -62,6 +65,6 @@ const categoriesSlice = createSlice({
 });
 
 export const categoriesReducer = categoriesSlice.reducer;
-export const {setShow} = categoriesSlice.actions;
+export const {setShow, updateOneCategory} = categoriesSlice.actions;
 
 

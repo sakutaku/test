@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useAppDispatch} from "../../app/hook";
 import {fetchTransactions} from "../../store/transactionThunk";
 import {fetchCategories} from "../../store/categoriesThunk";
@@ -6,18 +6,28 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import CategoryItem from "./CategoryItem";
 import Header from "../../components/Header/Header";
-import {setShow} from "../../store/categoriesSlice";
+import {setShow, updateOneCategory} from "../../store/categoriesSlice";
 import CategoryModal from "../CategoryModal/CategoryModal";
 
 const Categories = () => {
     const dispatch = useAppDispatch();
     const categories = useSelector((state: RootState) => state.categories.allCategories);
     const show = useSelector((state: RootState) => state.categories.show);
+    const category = useSelector((state: RootState) => state.categories.oneCategory);
 
+
+    const checkOneCategory = useCallback(async () => {
+        await dispatch(updateOneCategory());
+    }, [dispatch]);
 
     useEffect( () => {
         dispatch(fetchCategories());
-    }, [dispatch]);
+
+        if(category !== null) {
+            void checkOneCategory();
+        }
+
+    }, [dispatch, category, checkOneCategory]);
 
     const onAddClick = () => {
         dispatch(setShow(true));
