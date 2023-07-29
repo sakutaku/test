@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {IApiTransaction, ITransaction} from "../types";
+import {IApiTransaction, ITransaction, TApiOneTransaction} from "../types";
 import axiosApi from "../axiosApi";
 import {AppDispatch, RootState} from "../app/store";
 import {clearCount, updateTransaction} from "./transactionSlice";
@@ -33,8 +33,9 @@ export const deleteTransaction = createAsyncThunk<void, string>(
     }
 );
 
-export const fetchCategories = createAsyncThunk<void, string, { dispatch: AppDispatch , state: RootState}>(
-    'transactions/fetchCategories',
-    async () => {
+export const createTransaction = createAsyncThunk<void, TApiOneTransaction>(
+    'transactions/create',
+    async (transaction) => {
+        await axiosApi.post('/transactions.json', transaction);
     }
-)
+);

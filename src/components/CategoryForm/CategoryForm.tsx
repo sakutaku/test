@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {ICategoryMutation, TApiCategory} from "../../types";
 import {useAppDispatch} from "../../app/hook";
 import {setShow} from "../../store/categoriesSlice";
+import BtnSpinner from "../Spinner/BtnSpinner";
 
 interface Props {
     onSubmit: (newPizza: TApiCategory) => void;
@@ -67,8 +68,15 @@ const CategoryForm: React.FC<Props> = ({onSubmit, isEdit, existingCategory = ini
                     onChange={categoryChange}
                 />
             </div>
-            <div className="form-btns">
-                <button className="btn btn-form" type="submit">Submit</button>
+            <div className={isEdit ? '' : 'form-btns'}>
+                <button
+                    className="btn btn-form"
+                    type="submit"
+                    disabled={isLoading}
+                >
+                    {isEdit ? 'Save' : 'Create'}
+                    {isLoading && <BtnSpinner/>}
+                </button>
                 {isAdd ? <button className="btn btn-cancel" onClick={() => dispatch(setShow(false))}>Cancel</button> : null}
             </div>
 

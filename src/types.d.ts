@@ -38,6 +38,12 @@ export type TApiTransaction = {
     category: string,
     price: number,
 }
+
+export type TApiOneTransaction = {
+    category: string,
+    date: string,
+    price: number,
+}
 export interface IOneCategory {
     name: string,
     type: string,

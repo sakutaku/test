@@ -1,6 +1,6 @@
 import {ITransaction} from "../types";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {deleteTransaction, fetchTransactions} from "./transactionThunk";
+import {createTransaction, deleteTransaction, fetchTransactions} from "./transactionThunk";
 
 interface TransactionState {
     items: ITransaction[],
@@ -8,7 +8,7 @@ interface TransactionState {
     total: number;
     deleteLoading: boolean | string,
     show: boolean;
-    selectedCategories: Array<string>;
+    createLoading: boolean;
 }
 
 const initialState: TransactionState = {
@@ -17,7 +17,7 @@ const initialState: TransactionState = {
     total: 0,
     deleteLoading: false,
     show: false,
-    selectedCategories: [],
+    createLoading: false,
 };
 
 const transactionSlice = createSlice({
@@ -49,12 +49,6 @@ const transactionSlice = createSlice({
         },
         setShowTr: (state, {payload: boolean}) => {
             state.show = boolean;
-        },
-        addCategory: (state, action) => {
-            state.selectedCategories.push(action.payload);
-        },
-        clearCategory: (state) => {
-            state.selectedCategories = [];
         }
     },
     extraReducers: builder => {
@@ -67,6 +61,15 @@ const transactionSlice = createSlice({
         });
         builder.addCase(fetchTransactions.rejected, state => {
             state.fetchLoading = false;
+        });
+        builder.addCase(createTransaction.pending, (state) => {
+            state.createLoading = true;
+        });
+        builder.addCase(createTransaction.fulfilled, (state) => {
+            state.createLoading = false;
+        });
+        builder.addCase(createTransaction.rejected, (state) => {
+            state.createLoading = false;
         });
         builder.addCase(deleteTransaction.pending, (state, {meta}) => {
             state.deleteLoading = meta.arg;
@@ -86,7 +89,5 @@ export const {
     updateTransaction,
     countSum,
     clearCount,
-    setShowTr,
-    addCategory,
-    clearCategory
+    setShowTr
 } = transactionSlice.actions;

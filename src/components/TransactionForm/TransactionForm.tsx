@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import {ICategory, TApiTransaction} from "../../types";
+import {ICategory, TApiOneTransaction, TApiTransaction} from "../../types";
 import {useAppDispatch} from "../../app/hook";
 import {setShowTr} from "../../store/transactionSlice";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
+import BtnSpinner from "../Spinner/BtnSpinner";
 
 interface Props {
-    onSubmit: (newTransaction: TApiTransaction) => void;
+    onSubmit: (newTransaction: TApiOneTransaction) => void;
     isEdit?: boolean,
     existingCategory?: TApiTransaction,
     isLoading?: boolean,
@@ -32,10 +33,6 @@ const TransactionForm: React.FC<Props> = ({onSubmit, isEdit,existingCategory = i
         }
     });
 
-    if(all.length > 0) {
-        console.log(all);
-    }
-
     const transactionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>{
         const {name, value} = e.target;
 
@@ -48,10 +45,36 @@ const TransactionForm: React.FC<Props> = ({onSubmit, isEdit,existingCategory = i
     const onCancelClick = ()=>{
         dispatch(setShowTr(false));
         all = [];
+    };
+
+    const date = new Date();
+    const curr_date = date.getDate();
+    const curr_m = date.getMonth() + 1;
+    const curr_y = date.getFullYear();
+    let dateMain: string = '';
+
+    if(curr_m < 10) {
+        dateMain = curr_y+"-"+"0"+curr_m+"-"+ curr_date;
+    } else {
+        dateMain = curr_y+"-"+curr_m+"-"+ curr_date;
     }
 
+
+    const onFormSubmit =  (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if(newTransaction.type !== '' &&newTransaction.category !== '') {
+            onSubmit({
+                ...newTransaction,
+                date: dateMain,
+            });
+        } else {
+            alert('Fill the form!');
+        }
+    };
+
     return (
-        <form className="transaction-form">
+        <form className="transaction-form" onSubmit={onFormSubmit}>
             <h2>{isEdit ? 'Edit transaction' : 'Add transaction'}</h2>
             <div className="input-transaction-one">
                 <label htmlFor="type" className="label">Category</label>
@@ -92,8 +115,11 @@ const TransactionForm: React.FC<Props> = ({onSubmit, isEdit,existingCategory = i
                     onChange={transactionChange}
                 />
             </div>
-            <div className="form-btns">
-                <button className="btn btn-form" type="submit">Submit</button>
+            <div className={isEdit ? '' : 'form-btns'}>
+                <button className="btn btn-form" type="submit" disabled={isLoading}>
+                    {isLoading && <BtnSpinner/>}
+                    {isEdit ? 'Save' : 'Create'}
+                </button>
                 {isAdd ? <button className="btn btn-cancel" onClick={onCancelClick}>Cancel</button> : null}
             </div>
         </form>
