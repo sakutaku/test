@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
 import CategoryForm from "../../components/CategoryForm/CategoryForm";
 import {useAppDispatch} from "../../app/hook";
-import {fetchCategory, fetchUpdateCategory} from "../../store/categoriesThunk";
+import {createCategory, fetchCategories, fetchCategory, fetchUpdateCategory} from "../../store/categoriesThunk";
 import {TApiCategory} from "../../types";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import Spinner from "../../components/Spinner/Spinner";
 import {setShow} from "../../store/categoriesSlice";
+import {useNavigate} from "react-router-dom";
 
 interface Props {
     isEdit?: boolean;
@@ -14,27 +15,18 @@ interface Props {
 }
 const CategoryModal: React.FC<Props> = ({isEdit, id}) => {
     const dispatch = useAppDispatch();
-    // const fetchLoading = useSelector((state: RootState) => state.categories.fetchOneLoading);
-    // const updateLoading = useSelector((state: RootState) => state.categories.updateLoading);
-    // const category = useSelector((state: RootState) => state.categories.oneCategory);
-    //
-    // useEffect(() => {
-    //     if(id) {
-    //         dispatch(fetchCategory(id));
-    //     }
-    //
-    // }, [dispatch, id]);
-    //
-    // const onSubmit = async (category: TApiCategory) => {
-    //     if(id) {
-    //         await dispatch(fetchUpdateCategory({id, category}));
-    //     }
-    // };
+    const navigate = useNavigate();
+    const onSubmit = async (category: TApiCategory) => {
+        await dispatch(createCategory(category));
+        dispatch(fetchCategories());
+        dispatch(setShow(false));
+    }
 
     return (
         <div className="backdrop">
             <div className="modal">
-                <button onClick={() => dispatch(setShow(false))}>close</button>
+                {/*<button onClick={() => dispatch(setShow(false))}>close</button>*/}
+                <CategoryForm onSubmit={onSubmit} isAdd={true}/>
             </div>
         </div>
     );

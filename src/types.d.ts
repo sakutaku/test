@@ -17,7 +17,9 @@ export interface ICategory{
 
 export type TApiCategory = Omit<ICategory, 'id'>;
 
-
+export interface IApiCategory {
+    [id: string]: ICategory;
+}
 export interface ICategoryMutation{
     name: string,
     type: string,

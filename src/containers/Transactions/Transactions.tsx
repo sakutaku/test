@@ -21,11 +21,9 @@ const Transactions = () => {
         dispatch(fetchCategories());
     }, [dispatch]);
 
-
     categories.forEach((category, index) => {
             transactions.map((oneTr) => {
                 console.log(index);
-
             })
         });
 

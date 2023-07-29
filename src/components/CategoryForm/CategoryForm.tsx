@@ -1,20 +1,23 @@
 import React, {useState} from 'react';
 import {ICategoryMutation, TApiCategory} from "../../types";
+import {useAppDispatch} from "../../app/hook";
+import {setShow} from "../../store/categoriesSlice";
 
 interface Props {
     onSubmit: (newPizza: TApiCategory) => void;
     isEdit?: boolean,
     existingCategory?: ICategoryMutation,
     isLoading?: boolean,
+    isAdd?: boolean,
 }
 
 const initialState = {
     name: '',
     type: '',
 };
-const CategoryForm: React.FC<Props> = ({onSubmit, isEdit, existingCategory = initialState, isLoading}) => {
+const CategoryForm: React.FC<Props> = ({onSubmit, isEdit, existingCategory = initialState, isLoading, isAdd}) => {
     const [newCategory, setNewCategory] = useState(existingCategory);
-
+    const dispatch = useAppDispatch();
     const categoryChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>{
         const {name, value} = e.target;
 
@@ -38,7 +41,7 @@ const CategoryForm: React.FC<Props> = ({onSubmit, isEdit, existingCategory = ini
 
     return (
         <form className="category-form" onSubmit={onFormSubmit}>
-            <div className="input-wrap">
+            <div className="input-wrap-one">
                 <label htmlFor="type" className="label">Category</label>
                 <select value={newCategory.type}
                         required
@@ -53,7 +56,7 @@ const CategoryForm: React.FC<Props> = ({onSubmit, isEdit, existingCategory = ini
                     <option value="income">Income</option>
                 </select>
             </div>
-            <div className="input-wrap">
+            <div className="input-wrap-two">
                 <label htmlFor="name">Title</label>
                 <input
                     type="text"
@@ -64,7 +67,11 @@ const CategoryForm: React.FC<Props> = ({onSubmit, isEdit, existingCategory = ini
                     onChange={categoryChange}
                 />
             </div>
-            <button className="btn btn-form" type="submit">Submit</button>
+            <div className="form-btns">
+                <button className="btn btn-form" type="submit">Submit</button>
+                {isAdd ? <button className="btn btn-cancel" onClick={() => dispatch(setShow(false))}>Cancel</button> : null}
+            </div>
+
         </form>
     );
 };
