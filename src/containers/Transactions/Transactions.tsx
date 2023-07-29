@@ -68,7 +68,12 @@ const Transactions = () => {
 
     if(!transactionsLoading) {
         transactionsItems = allTransactions.map((item) => (
-                <TransactionItem item={item} key={item.id} deleteLoading={deleteLoading} onDelete={() => removeTransaction(item.id)}/>
+                <TransactionItem
+                    item={item}
+                    key={item.id}
+                    deleteLoading={deleteLoading}
+                    onDelete={() => removeTransaction(item.id)}
+                />
         ));
     }
 

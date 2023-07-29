@@ -30,7 +30,7 @@ const TransactionItem: React.FC<Props> = ({item, deleteLoading, onDelete}) => {
                 <div>{item.name}</div>
             </div>
             <div className="category-item-right">
-                <span>{item.category === 'expense' ? '-' + item.price + 'KGS' : '+' + item.price + 'KGS'}</span>
+                <span style={item.category === 'expense' ? {color: '#ff3800'} : {color: 'fff'}}>{item.category === 'expense' ? '-' + item.price + 'KGS' : '+' + item.price + 'KGS'}</span>
                 <NavLink
                     to={'edit/' + item.id}
                     className="btn-edit-two"
