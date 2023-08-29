@@ -1,10 +1,8 @@
 import React from 'react';
 import logo from "../../assets/images/Logo.png";
-import {NavLink} from "react-router-dom";
-import CategoryModal from "../../containers/CategoryModal/CategoryModal";
+import {Link, NavLink} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
-import {setShow} from "../../store/categoriesSlice";
 import {useAppDispatch} from "../../app/hook";
 import {setShowTr} from "../../store/transactionSlice";
 import TransactionModal from "../../containers/TransactionModal/TransactionModal";
@@ -27,7 +25,10 @@ const Header = () => {
         <header className="header">
             <div className="container">
                 <div className="logo">
-                    <img src={logo} alt="Logo"/>
+                    <Link to={'/'}>
+                        <img src={logo} alt="Logo"/>
+                    </Link>
+
                 </div>
                 <div className="header-btns">
                     <NavLink to={'/categories'} className="btn btn-category">Categories</NavLink>

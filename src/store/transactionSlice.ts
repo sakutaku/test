@@ -13,7 +13,6 @@ interface TransactionState {
     oneTransaction: TApiTransaction | null;
     fetchLoading: boolean;
     fetchOneLoading: boolean;
-    total: number;
     deleteLoading: boolean | string,
     show: boolean;
     updateLoading: boolean,
@@ -25,7 +24,6 @@ const initialState: TransactionState = {
     oneTransaction: null,
     fetchLoading: false,
     fetchOneLoading: false,
-    total: 0,
     deleteLoading: false,
     show: false,
     updateLoading: false,
@@ -52,12 +50,6 @@ const transactionSlice = createSlice({
 
                 state.items = newTransactions;
             });
-        },
-        countSum: (state, {payload: num}: PayloadAction<number>) => {
-            state.total+=num;
-        },
-        clearCount: (state) => {
-            state.total = 0;
         },
         setShowTr: (state, {payload: boolean}) => {
             state.show = boolean;
@@ -121,8 +113,6 @@ export const transactionsReducer = transactionSlice.reducer;
 
 export const {
     updateTransaction,
-    countSum,
-    clearCount,
     setShowTr,
     updateOneTransaction
 } = transactionSlice.actions;

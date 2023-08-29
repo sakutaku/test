@@ -14,7 +14,6 @@ const Transactions = () => {
     const transactions = useSelector((state: RootState) => state.transactions.items);
     const transactionsLoading = useSelector((state: RootState) => state.transactions.fetchLoading);
     const categories = useSelector((state: RootState) => state.categories.allCategories);
-    const totalSum = useSelector((state: RootState) => state.transactions.total);
     const deleteLoading = useSelector((state: RootState) => state.transactions.deleteLoading);
     const transaction = useSelector((state: RootState) => state.transactions.oneTransaction);
 
@@ -39,7 +38,6 @@ const Transactions = () => {
             await dispatch(deleteTransaction(id));
             await dispatch(fetchTransactions());
         }
-
     };
 
     categories.forEach((category: ICategory) => {
@@ -56,13 +54,14 @@ const Transactions = () => {
 
                     allTransactions.push(newObj);
                 }
-
             });
         });
 
     allTransactions.sort((a,b) => {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
+
+    console.log(typeof allTransactions[0].price);
 
     let transactionsItems: React.ReactNode = <Spinner/>;
 
@@ -77,11 +76,17 @@ const Transactions = () => {
         ));
     }
 
+    const total = allTransactions.reduce((acc, value) => {
+        if(value.category === 'income') {
+            return acc + Number(value.price);
+        }
+        return acc - Number(value.price);
+    }, 0);
 
     return (
         <div className="container">
             <div className="transactions-page">
-                <h2 className="transaction-total">Total: {totalSum} KGS</h2>
+                <h2 className="transaction-total">Total: {total} KGS</h2>
             </div>
             <div>
                 {transactionsItems}

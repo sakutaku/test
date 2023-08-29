@@ -7,7 +7,7 @@ import {
 } from "../types";
 import axiosApi from "../axiosApi";
 import {AppDispatch, RootState} from "../app/store";
-import {clearCount, updateTransaction} from "./transactionSlice";
+import {updateTransaction} from "./transactionSlice";
 
 export const fetchTransactions = createAsyncThunk<ITransaction[], undefined, { dispatch: AppDispatch , state: RootState}>(
     'transactions/fetch',
@@ -26,7 +26,6 @@ export const fetchTransactions = createAsyncThunk<ITransaction[], undefined, { d
         }
 
         thunkAPI.dispatch(updateTransaction(newTransactions));
-        thunkAPI.dispatch(clearCount());
         return newTransactions;
     }
 );
