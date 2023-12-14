@@ -19,7 +19,7 @@ const Transactions = () => {
 
 
     const checkOneTransaction = useCallback(async () => {
-        await dispatch(updateOneTransaction());
+        dispatch(updateOneTransaction());
     }, [dispatch]);
 
     const allTransactions: IAllTransactions[] = [];
@@ -60,8 +60,6 @@ const Transactions = () => {
     allTransactions.sort((a,b) => {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
-
-    console.log(typeof allTransactions[0].price);
 
     let transactionsItems: React.ReactNode = <Spinner/>;
 
